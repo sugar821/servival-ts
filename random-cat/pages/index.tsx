@@ -6,15 +6,28 @@ export const IndexPage: NextPage = () => {
   // ❶ useStateを使って状態を定義する
   const [imageUrl, setImageUrl] = useState("");
   const [loading, setLoading] = useState(true);
+  const [indexArray, setIndexArray] = useState([]);
   // ❷ マウント時に画像を読み込む宣言
   useEffect(() => {
     fetchImage().then((newImage) => {
       setImageUrl(newImage.url); // 画像URLの状態を更新する
       setLoading(false); // ローディング状態を更新する
+      setIndexArray([1,2,3])
     });
   }, []);
-  // ❸ ローディング中でなければ、画像を表示する
-  return <div>{loading || <img src={imageUrl} />}</div>;
+  const handleClick = async () => {
+    setLoading(true); // 読込中フラグを立てる
+    const newImage = await fetchImage();
+    setImageUrl(newImage.url); // 画像URLの状態を更新する
+    setLoading(false); // 読込中フラグを倒す
+  };
+  return (
+    <div>
+      <button onClick={handleClick}>他のにゃんこも見る</button>
+      <div>{loading || <img src={imageUrl} />}</div>
+      <div>{indexArray }</div>
+    </div>
+  );
 };
 
 export default IndexPage;
